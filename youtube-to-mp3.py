@@ -1,12 +1,12 @@
 import youtube_dl
 import shutil
-from slugify import slugify
+import re
 
 
 def run():
     video_url = input('Enter the YouTube URL. ')
     video_info = youtube_dl.YoutubeDL().extract_info(url=video_url, download=False)
-    name = slugify(video_info['title'])
+    name = re.sub(r'[^\w\s]', '', video_info.get('title'))
     filename = f"{name}.mp3"
     options = {
         'format': 'bestaudio/best',
@@ -15,7 +15,7 @@ def run():
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
-            'preferredquality': '192'
+            'preferredquality': '320'
         }]
     }
 
@@ -27,3 +27,4 @@ def run():
 
 if __name__ == '__main__':
     run()
+
